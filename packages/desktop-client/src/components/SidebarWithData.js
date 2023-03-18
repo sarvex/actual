@@ -33,6 +33,9 @@ function EditableBudgetName({ prefs, savePrefs }) {
       case 'help':
         window.open('https://actualbudget.org/docs/', '_blank');
         break;
+      case 'load-backup':
+        dispatch(actions.pushModal('load-backup'));
+        break;
       case 'close':
         dispatch(closeBudget());
         break;
@@ -43,7 +46,12 @@ function EditableBudgetName({ prefs, savePrefs }) {
   let items = [
     { name: 'rename', text: 'Rename budget' },
     { name: 'settings', text: 'Settings' },
-    ...(Platform.isBrowser ? [{ name: 'help', text: 'Help' }] : []),
+    ...(Platform.isBrowser
+      ? [
+          { name: 'help', text: 'Help' },
+          { name: 'load-backup', text: 'Load backup…' },
+        ]
+      : []),
     { name: 'close', text: 'Close file' },
   ];
 
