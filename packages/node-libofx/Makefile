@@ -9,7 +9,7 @@ finalweb:
 finalnode:
 	$(MAKE) EMCC_OUTPUT_FILE="libofx.electron.js" wasm
 
-wasm: 
+wasm:
 	emcc emscripten.cpp -O2 libofx/lib/.libs/libofx.dylib OpenSP-1.5.2/lib/.libs/libosp.dylib \
 		-s EXPORTED_FUNCTIONS="['_init', '_debug', '_set_ofx_version', '_set_app_id', '_set_app_version', '_parse_data', '_get_new_context', '_ofx_set_statement_cb', '_ofx_set_account_cb', '_ofx_set_transaction_cb', '_transaction_amount', '_transaction_fi_id', '_transaction_date', '_transaction_payee', '_transaction_name', '_transaction_memo']" \
         -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "addFunction"]' \
@@ -29,8 +29,11 @@ opensp:
 	sed -i -e 's/\#define ptrdiff_t long/\/*\#define ptrdiff_t  long\*\//g' OpenSP-1.5.2/config.h
 	cd OpenSP-1.5.2 && emmake make
 
+OPENSP_INCLUDES=$(PWD)/OpenSP-1.5.2/generic
+OPENSP_LIBS=$(PWD)/OpenSP-1.5.2/lib/.libs
+
 ofx:
-	cd libofx && emconfigure ./configure --verbose --without-iconv --with-opensp-includes=/Users/james/projects/actual/packages/node-libofx/OpenSP-1.5.2/generic --with-opensp-libs=/Users/james/projects/actual/packages/node-libofx/OpenSP-1.5.2/lib/.libs
+	cd libofx && emconfigure ./configure --verbose --without-iconv --with-opensp-includes=$(OPENSP_INCLUDES) --with-opensp-libs=$(OPENSP_LIBS)
 	cd libofx && emmake make
 
 clean:
