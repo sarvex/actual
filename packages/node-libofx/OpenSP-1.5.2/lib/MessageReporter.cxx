@@ -28,11 +28,12 @@ MessageReporter::MessageReporter(OutputCharStream *os)
 XMLMessageReporter::XMLMessageReporter(OutputCharStream* os) :
 	MessageReporter(os) , id(0) , msgmode(SP_MESSAGES_TRADITIONAL) {
   char* fmt = getenv("SP_MESSAGE_FORMAT") ;
-  if ( fmt )
+  if ( fmt ) {
     if ( !strcmp(fmt, "XML") )
       msgmode = SP_MESSAGES_XML ;
     else if ( !strcmp(fmt, "NONE") )
       msgmode = SP_MESSAGES_NONE ;
+  }
 }
 
 MessageReporter::~MessageReporter()

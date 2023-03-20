@@ -82,13 +82,13 @@ CmdLineApp::CmdLineApp(const char *requiredInternalCode)
 {
   initCodingSystem(requiredInternalCode);
   setMessageStream(makeStdErr());
-  if (internalCharsetIsDocCharset_) 
-    registerOption('b', SP_T("bctf"), 
+  if (internalCharsetIsDocCharset_)
+    registerOption('b', SP_T("bctf"),
                    CmdLineAppMessages::name, CmdLineAppMessages::bHelp);
   else
-    registerOption('b', SP_T("encoding"), 
+    registerOption('b', SP_T("encoding"),
                    CmdLineAppMessages::name, CmdLineAppMessages::eHelp);
-  registerOption('f', SP_T("error-file"), 
+  registerOption('f', SP_T("error-file"),
                  CmdLineAppMessages::file, CmdLineAppMessages::fHelp);
   registerOption('v', SP_T("version"), CmdLineAppMessages::vHelp);
   registerOption('h', SP_T("help"), CmdLineAppMessages::hHelp);
@@ -131,7 +131,7 @@ void CmdLineApp::registerOption(AppChar c, const AppChar *name,
                                 const MessageType1 &doc)
 {
   // these four are used for signals from Options<>::get()
-  ASSERT((c != '-') && (c != ':') && (c != '?') && (c != '=')); 
+  ASSERT((c != '-') && (c != ':') && (c != '?') && (c != '='));
   LongOption<AppChar> opt;
   opt.value = c;
 #ifdef SP_HAVE_LOCALE
@@ -147,15 +147,15 @@ void CmdLineApp::registerOption(AppChar c, const AppChar *name,
   opt.name = name;
   opt.hasArgument = (arg.module() != CmdLineAppMessages::noArg.module()
                     || arg.number() != CmdLineAppMessages::noArg.number());
-  for (size_t i = 0; i < opts_.size(); i++) 
+  for (size_t i = 0; i < opts_.size(); i++)
     if (opts_[i].value == c) {
       for (; i + 1 < opts_.size(); i++) {
-        opts_[i] = opts_[i + 1]; 
+        opts_[i] = opts_[i + 1];
         optArgs_[i] = optArgs_[i + 1];
         optDocs_[i] = optDocs_[i + 1];
       }
       opts_[i] = opt;
-      optArgs_[i] = arg; 
+      optArgs_[i] = arg;
       optDocs_[i] = doc;
       return;
     }
@@ -199,21 +199,21 @@ void CmdLineApp::usage()
   Vector<CopyOwner<MessageArg> > args(1);
   StringMessageArg arg(convertInput(progName ? progName : SP_T("program")));
   args[0] = arg.copy();
-  if (usages_.size() == 0) 
+  if (usages_.size() == 0)
     usages_.push_back(CmdLineAppMessages::defaultUsage);
   for (size_t i = 0; i < usages_.size(); i++) {
     StrOutputCharStream ostr;
     StringC tem;
     formatMessage(usages_[i], args, ostr, 1);
-    ostr.extractString(tem); 
+    ostr.extractString(tem);
     Vector<CopyOwner<MessageArg> > args2(1);
     StringMessageArg arg2(tem);
     args2[0] = arg2.copy();
-    formatMessage(i ? CmdLineAppMessages::usageCont 
+    formatMessage(i ? CmdLineAppMessages::usageCont
 		  : CmdLineAppMessages::usage,
 		  args2, *stdOut, 1);
     *stdOut << nl;
-  } 
+  }
 
   for (size_t i = 0; i < preInfos_.size(); i++) {
     formatMessage(preInfos_[i], args, *stdOut, 1);
@@ -269,7 +269,7 @@ void CmdLineApp::usage()
     if (!getMessageText(optArgs_[i], t))
       t.resize(0);
     StringMessageArg arg(t);
-    args2[0] = arg.copy(); 
+    args2[0] = arg.copy();
     formatMessage(optDocs_[i], args2, ostr, 1);
     StringC tem;
     ostr.extractString(tem);
@@ -305,7 +305,7 @@ void outOfMemory()
   exit(1);
 #ifdef SP_FANCY_NEW_HANDLER
   return 0;
-#endif  
+#endif
 }
 
 int CmdLineApp::init(int, AppChar **argv)
@@ -324,10 +324,10 @@ int CmdLineApp::init(int, AppChar **argv)
   if (progName)
     setProgramName(convertInput(progName));
   MessageTable::instance()->registerMessageDomain(libModule,
-                                                  SP_MESSAGE_DOMAIN, 
+                                                  SP_MESSAGE_DOMAIN,
                                                   SP_LOCALE_DIR);
   MessageTable::instance()->registerMessageDomain(appModule,
-                                                  SP_MESSAGE_DOMAIN, 
+                                                  SP_MESSAGE_DOMAIN,
                                                   SP_LOCALE_DIR);
   return 0;
 }
@@ -371,7 +371,7 @@ catch (
   }
   return 1;
 #endif /* SP_ANSI_LIB */
-}    
+}
 
 int CmdLineApp::processOptions(int argc, AppChar **argv, int &nextArg)
 {
@@ -393,7 +393,7 @@ int CmdLineApp::processOptions(int argc, AppChar **argv, int &nextArg)
           ostr[i] = *t;
         }
         ostr[i] = '\0';
-      } 
+      }
       else {
         ostr[0] = options.opt();
         ostr[1] = SP_T('\0');

@@ -87,7 +87,7 @@ void Vector<T>::insert(const T *p, const T *q1, const T *q2)
   size_t n = q2 - q1;
   reserve(size_ + n);
   if (i != size_)
-    memmove(ptr_ + i + n, ptr_ + i, (size_ - i)*sizeof(T));
+    memmove((void *)(ptr_ + i + n), (void *)(ptr_ + i), (size_ - i)*sizeof(T));
   for (T *pp = ptr_ + i; q1 != q2; q1++, pp++) {
     (void)new (pp) T(*q1);
     size_++;
@@ -131,7 +131,7 @@ T *Vector<T>::erase(const T *p1, const T *p2)
   for (const T *p = p1; p != p2; p++)
     ((X *)p)->~X();
   if (p2 != ptr_ + size_)
-    memmove((T *)p1, p2, ((const T *)(ptr_ + size_) - p2)*sizeof(T));
+    memmove((void *)(T *)p1, (void *)p2, ((const T *)(ptr_ + size_) - p2)*sizeof(T));
   size_ -= p2 - p1;
   return (T *)p1;
 }
@@ -147,7 +147,7 @@ void Vector<T>::reserve1(size_t size)
   void *p = ::operator new(newAlloc * sizeof(T));
   alloc_ = newAlloc;
   if (ptr_) {
-    memcpy(p, ptr_, size_*sizeof(T));
+    memcpy(p, (void *)ptr_, size_*sizeof(T));
     ::operator delete((void *)ptr_);
   }
   ptr_ = (T *)p;
