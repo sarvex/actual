@@ -5,10 +5,10 @@
 # It is necessary for linking the library.
 
 # The name that we can dlopen(3).
-dlname='libosp.5.dylib'
+dlname=''
 
 # Names of this library.
-library_names='libosp.5.0.0.dylib libosp.5.dylib libosp.dylib'
+library_names=''
 
 # The name of the static archive.
 old_library='libosp.a'

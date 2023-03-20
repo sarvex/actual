@@ -191,7 +191,7 @@ AC_MSG_CHECKING([for libosp])
 ##dnl It is really just a link test rather than a run test, it does nothing
 AC_LANG_CPLUSPLUS 
 	AC_TRY_RUN([
-		#include "ParserEventGeneratorKit.h"
+		#include <ParserEventGeneratorKit.h>
 		using namespace std;
 		class OutlineApplication : public SGMLApplication {
 		public:

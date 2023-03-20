@@ -44,7 +44,7 @@ mkinstalldirs = $(SHELL) $(MKINSTALLDIRS)
 
 l = @INTL_LIBTOOL_SUFFIX_PREFIX@
 
-AR = ar
+AR = emar
 CC = @CC@
 LIBTOOL = @LIBTOOL@
 RANLIB = @RANLIB@

@@ -22,8 +22,10 @@ wasm:
         --embed-file libofx/dtd/opensp.dcl \
 		-o $(EMCC_OUTPUT_FILE)
 
+export AR=emar
+export STRIP=emstrip
 opensp:
-	cd OpenSP-1.5.2 && emconfigure ./configure --disable-doc-build
+	cd OpenSP-1.5.2 && emconfigure ./configure --disable-doc-build --disable-shared
 	sed -i -e 's/\/\* \#undef HAVE_NAMESPACE_STD \*\//\#define HAVE_NAMESPACE_STD/g' OpenSP-1.5.2/config.h
 	sed -i -e 's/\/\* \#undef HAVE_MEMMOVE \*\//\#define HAVE_MEMMOVE 1/g' OpenSP-1.5.2/config.h
 	sed -i -e 's/\#define ptrdiff_t long/\/*\#define ptrdiff_t  long\*\//g' OpenSP-1.5.2/config.h

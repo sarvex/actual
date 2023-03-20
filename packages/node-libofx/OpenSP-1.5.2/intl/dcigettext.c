@@ -151,7 +151,7 @@ char *getwd ();
 #  if VMS
 #   define getcwd(buf, max) (getcwd) (buf, max, 0)
 #  else
-char *getcwd ();
+// char *getcwd ();
 #  endif
 # endif
 # ifndef HAVE_STPCPY
