@@ -164,10 +164,11 @@ export function addSplitTransaction(transactions, id) {
     if (!trans.is_parent) {
       return trans;
     }
-    let prevSub = last(trans.subtransactions);
+    let prevSub = trans.subtransactions[trans.subtransactions.length - 1];
     trans.subtransactions.push(
       makeChild(trans, {
         amount: 0,
+        // @ts-expect-error Need to define a Transaction type
         sort_order: num(prevSub && prevSub.sort_order) - 1,
       }),
     );

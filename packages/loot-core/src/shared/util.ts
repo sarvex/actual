@@ -1,11 +1,14 @@
-export function last(arr) {
-  return arr[arr.length - 1];
+export type Id = { id: string };
+type PartialWithId<T> = T extends Id ? Id & Partial<T> : Partial<T>;
+
+function isId(obj: unknown): obj is Id {
+  return typeof obj === 'object' && obj != null && 'id' in obj;
 }
 
-export function getChangedValues(obj1, obj2) {
+export function getChangedValues<T extends object>(obj1: T, obj2: T) {
   // Keep the id field because this is mostly used to diff database
   // objects
-  const diff = obj1.id ? { id: obj1.id } : {};
+  const diff = (isId(obj1) ? { id: obj1.id } : {}) as PartialWithId<T>;
   const keys = Object.keys(obj2);
   let hasChanged = false;
 
@@ -21,7 +24,11 @@ export function getChangedValues(obj1, obj2) {
   return hasChanged ? diff : null;
 }
 
-export function hasFieldsChanged(obj1, obj2, fields) {
+export function hasFieldsChanged<T extends object>(
+  obj1: T,
+  obj2: T,
+  fields: ReadonlyArray<keyof T>,
+) {
   let changed = false;
   for (let i = 0; i < fields.length; i++) {
     let field = fields[i];
@@ -33,7 +40,13 @@ export function hasFieldsChanged(obj1, obj2, fields) {
   return changed;
 }
 
-export function applyChanges(changes, items) {
+type Change<T> = {
+  added?: readonly T[];
+  updated?: readonly T[];
+  deleted?: readonly T[];
+};
+
+export function applyChanges<T extends Id>(changes: Change<T>, items: T[]) {
   items = [...items];
 
   if (changes.added) {
@@ -64,7 +77,7 @@ export function applyChanges(changes, items) {
   return items;
 }
 
-export function partitionByField(data, field) {
+export function partitionByField<T>(data: readonly T[], field: keyof T) {
   let res = new Map();
   for (let i = 0; i < data.length; i++) {
     let item = data[i];
@@ -78,8 +91,12 @@ export function partitionByField(data, field) {
   return res;
 }
 
-export function groupBy(data, field, mapper?: (v: unknown) => unknown) {
-  let res = new Map();
+export function groupBy<T, K extends keyof T>(
+  data: readonly T[],
+  field: K,
+  mapper?: (item: T) => T,
+) {
+  let res = new Map<T[K], T[]>();
   for (let i = 0; i < data.length; i++) {
     let item = data[i];
     let key = item[field];
@@ -93,8 +110,8 @@ export function groupBy(data, field, mapper?: (v: unknown) => unknown) {
 // `Map` is better, but we can't swap it out because `Map` has a
 // different API and we need to go through and update everywhere that
 // uses it.
-function _groupById(data) {
-  let res = new Map();
+function _groupById<T extends Id>(data: readonly T[]) {
+  let res = new Map<string, T>();
   for (let i = 0; i < data.length; i++) {
     let item = data[i];
     res.set(item.id, item);
@@ -102,11 +119,14 @@ function _groupById(data) {
   return res;
 }
 
-export function diffItems(items, newItems) {
+export function diffItems<T extends Id>(
+  items: readonly T[],
+  newItems: readonly T[],
+) {
   let grouped = _groupById(items);
   let newGrouped = _groupById(newItems);
-  let added = [];
-  let updated = [];
+  let added: T[] = [];
+  let updated: T[] = [];
 
   let deleted = items
     .filter(item => !newGrouped.has(item.id))
@@ -127,8 +147,8 @@ export function diffItems(items, newItems) {
   return { added, updated, deleted };
 }
 
-export function groupById(data) {
-  let res = {};
+export function groupById<T extends Id>(data: readonly T[]) {
+  let res: { [id: string]: T } = {};
   for (let i = 0; i < data.length; i++) {
     let item = data[i];
     res[item.id] = item;
@@ -156,6 +176,7 @@ export function setIn(
   }
 }
 
+// can’t really be typed in TS
 export function getIn(map, keys) {
   let item = map;
   for (let i = 0; i < keys.length; i++) {
@@ -168,7 +189,7 @@ export function getIn(map, keys) {
   return item;
 }
 
-export function fastSetMerge(set1, set2) {
+export function fastSetMerge<T>(set1: Set<T>, set2: Set<T>) {
   let finalSet = new Set(set1);
   let iter = set2.values();
   let value = iter.next();
@@ -179,7 +200,7 @@ export function fastSetMerge(set1, set2) {
   return finalSet;
 }
 
-export function titleFirst(str) {
+export function titleFirst(str: string) {
   return str[0].toUpperCase() + str.slice(1);
 }
 
@@ -192,17 +213,23 @@ export let numberFormats = [
 ] as const;
 
 let numberFormat: {
-  value: string | null;
-  formatter: Intl.NumberFormat | null;
-  regex: RegExp | null;
-  separator?: string;
-} = {
-  value: null,
-  formatter: null,
-  regex: null,
-};
+  value: string;
+  formatter: Intl.NumberFormat;
+  regex: RegExp;
+  separator: string;
+  // variable is immediately set, so we can disable the rule here
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+} = null!;
 
-export function setNumberFormat({ format, hideFraction }) {
+setNumberFormat({ format: 'comma-dot', hideFraction: false });
+
+export function setNumberFormat({
+  format,
+  hideFraction,
+}: {
+  format: (typeof numberFormats)[number]['value'];
+  hideFraction: boolean;
+}) {
   let locale, regex, separator;
 
   switch (format) {
@@ -248,8 +275,6 @@ export function getNumberFormat() {
   return numberFormat;
 }
 
-setNumberFormat({ format: 'comma-dot', hideFraction: false });
-
 // Number utilities
 
 // We dont use `Number.MAX_SAFE_NUMBER` and such here because those
@@ -276,31 +301,35 @@ export function safeNumber(value: number) {
   return value;
 }
 
-export function toRelaxedNumber(value) {
+export function toRelaxedNumber(value: string) {
   return integerToAmount(currencyToInteger(value) || 0);
 }
 
-export function integerToCurrency(n) {
+export function toRelaxedInteger(value: string) {
+  return stringToInteger(value) || 0;
+}
+
+export function integerToCurrency(n: number) {
   return numberFormat.formatter.format(safeNumber(n) / 100);
 }
 
-export function amountToCurrency(n) {
+export function amountToCurrency(n: number | bigint) {
   return numberFormat.formatter.format(n);
 }
 
-export function currencyToAmount(str) {
+export function currencyToAmount(str: string) {
   let amount = parseFloat(
     str.replace(numberFormat.regex, '').replace(numberFormat.separator, '.'),
   );
   return isNaN(amount) ? null : amount;
 }
 
-export function currencyToInteger(str) {
+export function currencyToInteger(str: string) {
   let amount = currencyToAmount(str);
   return amount == null ? null : amountToInteger(amount);
 }
 
-export function stringToInteger(str) {
+export function stringToInteger(str: string) {
   let amount = parseInt(str.replace(/[^-0-9.,]/g, ''));
   if (!isNaN(amount)) {
     return amount;
@@ -308,11 +337,11 @@ export function stringToInteger(str) {
   return null;
 }
 
-export function amountToInteger(n) {
+export function amountToInteger(n: number) {
   return Math.round(n * 100);
 }
 
-export function integerToAmount(n) {
+export function integerToAmount(n: number) {
   return parseFloat((safeNumber(n) / 100).toFixed(2));
 }
 
@@ -320,12 +349,12 @@ export function integerToAmount(n) {
 // financial files and we don't want to parse based on the user's
 // number format, because the user could be importing from many
 // currencies. We extract out the numbers and just ignore separators.
-export function looselyParseAmount(amount) {
-  function safeNumber(v) {
+export function looselyParseAmount(amount: string): number {
+  function safeNumber(v: number) {
     return isNaN(v) ? null : v;
   }
 
-  function extractNumbers(v) {
+  function extractNumbers(v: string) {
     return v.replace(/[^0-9-]/g, '');
   }
 
@@ -334,7 +363,7 @@ export function looselyParseAmount(amount) {
   }
 
   let m = amount.match(/[.,][^.,]*$/);
-  if (!m || m.index === 0) {
+  if (!m || !m.index) {
     return safeNumber(parseFloat(extractNumbers(amount)));
   }
 
