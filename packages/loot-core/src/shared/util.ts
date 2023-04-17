@@ -1,4 +1,4 @@
-export function last(arr) {
+export function last<T>(arr: T[]): T | undefined {
   return arr[arr.length - 1];
 }
 
@@ -33,7 +33,16 @@ export function hasFieldsChanged(obj1, obj2, fields) {
   return changed;
 }
 
-export function applyChanges(changes, items) {
+type Changes<T> = {
+  added?: T[];
+  updated?: T[];
+  deleted?: T[];
+};
+
+export function applyChanges<T extends { id: unknown }>(
+  changes: Changes<T>,
+  items: T[],
+) {
   items = [...items];
 
   if (changes.added) {
@@ -136,38 +145,6 @@ export function groupById(data) {
   return res;
 }
 
-export function setIn(
-  map: Map<string, unknown>,
-  keys: string[],
-  item: unknown,
-): void {
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
-
-    if (i === keys.length - 1) {
-      map.set(key, item);
-    } else {
-      if (!map.has(key)) {
-        map.set(key, new Map<string, unknown>());
-      }
-
-      map = map.get(key) as Map<string, unknown>;
-    }
-  }
-}
-
-export function getIn(map, keys) {
-  let item = map;
-  for (let i = 0; i < keys.length; i++) {
-    item = item.get(keys[i]);
-
-    if (item == null) {
-      return item;
-    }
-  }
-  return item;
-}
-
 export function fastSetMerge(set1, set2) {
   let finalSet = new Set(set1);
   let iter = set2.values();
@@ -179,7 +156,7 @@ export function fastSetMerge(set1, set2) {
   return finalSet;
 }
 
-export function titleFirst(str) {
+export function titleFirst(str: string) {
   return str[0].toUpperCase() + str.slice(1);
 }
 
@@ -270,7 +247,7 @@ export function safeNumber(value: number) {
   }
   if (value > MAX_SAFE_NUMBER || value < MIN_SAFE_NUMBER) {
     throw new Error(
-      'safeNumber: can’t safely perform arithmetic with number: ' + value,
+      `safeNumber: can’t safely perform arithmetic with number: ${value}`,
     );
   }
   return value;
@@ -320,12 +297,12 @@ export function integerToAmount(n) {
 // financial files and we don't want to parse based on the user's
 // number format, because the user could be importing from many
 // currencies. We extract out the numbers and just ignore separators.
-export function looselyParseAmount(amount) {
-  function safeNumber(v) {
+export function looselyParseAmount(amount: string) {
+  function safeNumber(v: number) {
     return isNaN(v) ? null : v;
   }
 
-  function extractNumbers(v) {
+  function extractNumbers(v: string) {
     return v.replace(/[^0-9-]/g, '');
   }
 

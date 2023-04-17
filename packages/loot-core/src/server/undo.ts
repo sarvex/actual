@@ -1,7 +1,6 @@
 import { Timestamp } from '@actual-app/crdt';
 
 import * as connection from '../platform/server/connection';
-import { getIn } from '../shared/util';
 
 import { withMutatorContext, getMutatorContext } from './mutators';
 import { Message, sendMessages } from './sync';
@@ -158,7 +157,7 @@ export async function undo() {
 }
 
 function undoMessage(message, oldData) {
-  let oldItem = getIn(oldData, [message.dataset, message.row]);
+  let oldItem = oldData.get(message.dataset)?.get(message.row);
   if (oldItem) {
     let column = message.column;
     if (message.dataset === 'spreadsheet_cells') {
@@ -241,7 +240,7 @@ function redoResurrections(messages, oldData): Message[] {
   messages.forEach(message => {
     // If any of the ids didn't exist before, we need to "resurrect"
     // them by resetting their tombstones to 0
-    let oldItem = getIn(oldData, [message.dataset, message.row]);
+    let oldItem = oldData.get(message.dataset)?.get(message.row);
     if (
       !oldItem &&
       ![

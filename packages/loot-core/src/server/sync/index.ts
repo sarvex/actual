@@ -11,7 +11,6 @@ import * as asyncStorage from '../../platform/server/asyncStorage';
 import * as connection from '../../platform/server/connection';
 import logger from '../../platform/server/log';
 import { sequential, once } from '../../shared/async';
-import { setIn, getIn } from '../../shared/util';
 import { LocalPrefs } from '../../types/prefs';
 import { triggerBudgetChanges, setType as setBudgetType } from '../budget/base';
 import * as db from '../db';
@@ -297,7 +296,10 @@ export const applyMessages = sequential(async (messages: Message[]) => {
 
       for (let i = 0; i < rows.length; i++) {
         let row = rows[i];
-        setIn(data, [table, row.id], row);
+        if (!data.has(table)) {
+          data.set(table, new Map());
+        }
+        data.get(table).set(row.id, row);
       }
     }
 
@@ -338,7 +340,7 @@ export const applyMessages = sequential(async (messages: Message[]) => {
       const { dataset, row, column, timestamp, value } = msg;
 
       if (!msg.old) {
-        apply(msg, getIn(oldData, [dataset, row]) || added.has(dataset + row));
+        apply(msg, oldData.get(dataset)?.get(row) || added.has(dataset + row));
 
         if (dataset === 'prefs') {
           prefsToSet[row] = value;
