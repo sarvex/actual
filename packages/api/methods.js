@@ -1,6 +1,7 @@
+import { lib } from './app/bundle.api';
 import * as injected from './injected';
 
-export { default as q } from './app/query';
+export const { q } = lib;
 
 function send(name, args) {
   return injected.send(name, args);
