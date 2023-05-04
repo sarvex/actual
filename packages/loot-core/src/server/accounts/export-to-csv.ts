@@ -53,7 +53,7 @@ export async function exportQueryToCSV(query) {
         { Date: 'date' },
         { Payee: 'payee.name' },
         { ParentId: 'parent_id' },
-        { IsParent: 'is_parent' },
+        { IsParent: 'isParent' },
         { Notes: 'notes' },
         { Category: 'category.name' },
         { Amount: 'amount' },

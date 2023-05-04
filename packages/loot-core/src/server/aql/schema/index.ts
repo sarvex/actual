@@ -31,7 +31,7 @@ function f(type: string, opts?: Record<string, unknown>) {
 export const schema = {
   transactions: {
     id: f('id'),
-    is_parent: f('boolean'),
+    isParent: f('boolean'),
     is_child: f('boolean'),
     parent_id: f('id'),
     account: f('id', { ref: 'accounts', required: true }),
@@ -254,7 +254,7 @@ export const schemaConfig = {
 
     transactions: {
       fields: {
-        is_parent: 'isParent',
+        isParent: 'isParent',
         is_child: 'isChild',
         account: 'acct',
         imported_id: 'financial_id',

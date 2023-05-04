@@ -26,7 +26,7 @@ export function getAccountFilter(accountId, field = 'account') {
       return {
         [`${field}.offbudget`]: false,
         category: null,
-        is_parent: false,
+        isParent: false,
         $or: [
           {
             'payee.transfer_acct.offbudget': true,

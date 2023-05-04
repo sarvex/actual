@@ -23,7 +23,7 @@ function makeTransaction(data) {
 }
 
 function makeSplitTransaction(data, children) {
-  let parent = makeTransaction({ ...data, is_parent: true });
+  let parent = makeTransaction({ ...data, isParent: true });
   return [parent, ...children.map(t => makeChild(parent, t))];
 }
 
@@ -104,7 +104,7 @@ describe('Transactions', () => {
       updated: [
         {
           id: 't1',
-          is_parent: true,
+          isParent: true,
           error: splitError(5000),
         },
       ],
@@ -196,7 +196,7 @@ describe('Transactions', () => {
       expect.objectContaining({ amount: 2001 }),
       expect.objectContaining({
         amount: 2500,
-        is_parent: true,
+        isParent: true,
         error: splitError(2000),
       }),
       expect.objectContaining({ amount: 500, parent_id: 't1' }),

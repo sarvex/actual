@@ -16,7 +16,7 @@ let basicSchema = {
     amount: { type: 'integer' },
     amount2: { type: 'integer' },
     amount3: { type: 'float' },
-    is_parent: { type: 'boolean' },
+    isParent: { type: 'boolean' },
   },
 };
 

@@ -5,7 +5,7 @@ import type { ScheduleEntity } from './schedule';
 
 export interface TransactionEntity {
   id?: string;
-  is_parent?: boolean;
+  isParent?: boolean;
   is_child?: boolean;
   parent_id?: string;
   account: AccountEntity;

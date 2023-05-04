@@ -94,7 +94,7 @@ async function execTransactionsGrouped(
     let s = { ...sql };
 
     // Modify the where to only include non-parents
-    s.where = `${s.where} AND ${s.from}.is_parent = 0`;
+    s.where = `${s.where} AND ${s.from}.isParent = 0`;
 
     // We also want to exclude deleted transactions. Normally we
     // handle this manually down below, but now that we are doing a
@@ -218,7 +218,7 @@ async function execTransactionsBasic(
     if (splitType === 'none') {
       s.where = `${s.where} AND ${s.from}.parent_id IS NULL`;
     } else {
-      s.where = `${s.where} AND ${s.from}.is_parent = 0`;
+      s.where = `${s.where} AND ${s.from}.isParent = 0`;
     }
   }
 

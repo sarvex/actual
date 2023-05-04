@@ -212,7 +212,7 @@ function Account(props) {
       );
     } else {
       let trans = [transaction];
-      if (transaction.parent_id || transaction.is_parent) {
+      if (transaction.parent_id || transaction.isParent) {
         let index = transactions.findIndex(
           t => t.id === (transaction.parent_id || transaction.id),
         );

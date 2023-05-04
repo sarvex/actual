@@ -41,14 +41,14 @@ async function insertTransactions(repeatTimes = 1) {
       account: 'acct',
       date: '2020-01-04',
       amount: -100,
-      is_parent: true,
+      isParent: true,
     };
     let parent2 = {
       id: uuid.v4Sync(),
       account: 'acct',
       date: '2020-01-01',
       amount: -89,
-      is_parent: true,
+      isParent: true,
     };
 
     transactions = transactions.concat([
@@ -103,15 +103,15 @@ describe('runQuery', () => {
     data = (
       await runQuery(
         query('transactions')
-          .select(['is_child', 'is_parent'])
+          .select(['is_child', 'isParent'])
           .raw()
           .serialize(),
       )
     ).data;
     expect(data[0].is_child).toBe(false);
-    expect(data[0].is_parent).toBe(true);
+    expect(data[0].isParent).toBe(true);
     expect(data[1].is_child).toBe(true);
-    expect(data[1].is_parent).toBe(false);
+    expect(data[1].isParent).toBe(false);
   });
 
   it('provides named parameters and converts types', async () => {

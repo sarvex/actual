@@ -62,7 +62,7 @@ export function findParentIndex(transactions, idx) {
   // Walk backwards and find the last parent;
   while (idx >= 0) {
     let trans = transactions[idx];
-    if (trans.is_parent) {
+    if (trans.isParent) {
       return idx;
     }
     idx--;
@@ -119,7 +119,7 @@ export function replaceTransactions(transactions, id, func) {
     throw new Error('Tried to edit unknown transaction id: ' + id);
   }
 
-  if (trans.is_parent || trans.is_child) {
+  if (trans.isParent || trans.is_child) {
     let parentIndex = findParentIndex(transactions, idx);
     if (parentIndex == null) {
       console.log('Cannot find parent index');
@@ -161,7 +161,7 @@ export function replaceTransactions(transactions, id, func) {
 
 export function addSplitTransaction(transactions, id) {
   return replaceTransactions(transactions, id, trans => {
-    if (!trans.is_parent) {
+    if (!trans.isParent) {
       return trans;
     }
     let prevSub = last(trans.subtransactions);
@@ -177,7 +177,7 @@ export function addSplitTransaction(transactions, id) {
 
 export function updateTransaction(transactions, transaction) {
   return replaceTransactions(transactions, transaction.id, trans => {
-    if (trans.is_parent) {
+    if (trans.isParent) {
       let parent = trans.id === transaction.id ? transaction : trans;
       let sub = trans.subtransactions.map(t => {
         // Make sure to update the children to reflect the updated
@@ -205,14 +205,14 @@ export function updateTransaction(transactions, transaction) {
 
 export function deleteTransaction(transactions, id) {
   return replaceTransactions(transactions, id, trans => {
-    if (trans.is_parent) {
+    if (trans.isParent) {
       if (trans.id === id) {
         return null;
       } else if (trans.subtransactions.length === 1) {
         return {
           ...trans,
           subtransactions: null,
-          is_parent: false,
+          isParent: false,
           error: null,
         };
       } else {
@@ -227,13 +227,13 @@ export function deleteTransaction(transactions, id) {
 
 export function splitTransaction(transactions, id) {
   return replaceTransactions(transactions, id, trans => {
-    if (trans.is_parent || trans.is_child) {
+    if (trans.isParent || trans.is_child) {
       return trans;
     }
 
     return {
       ...trans,
-      is_parent: true,
+      isParent: true,
       error: num(trans.amount) === 0 ? null : SplitTransactionError(0, trans),
       subtransactions: [makeChild(trans, { amount: 0, sort_order: -1 })],
     };

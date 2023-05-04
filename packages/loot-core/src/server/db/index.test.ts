@@ -18,7 +18,7 @@ async function getTransactions(latestDate) {
       date: row.date,
       payee: row.payee,
       is_child: row.is_child,
-      is_parent: row.is_parent,
+      isParent: row.isParent,
       amount: row.amount,
       starting_balance_flag: row.starting_balance_flag,
       sort_order: row.sort_order,
@@ -118,7 +118,7 @@ describe('Database', () => {
         account: 'foo',
         amount: -24,
         sort_order: 8,
-        is_parent: true,
+        isParent: true,
       },
       {
         id: 'child3',
@@ -204,7 +204,7 @@ describe('Database', () => {
         category: 'cat1',
         amount: -24,
         sort_order: 8,
-        is_parent: true,
+        isParent: true,
       },
       {
         id: 'child3',
@@ -251,7 +251,7 @@ describe('Database', () => {
         category: 'cat1',
         amount: -24,
         sort_order: 8,
-        is_parent: true,
+        isParent: true,
       },
       {
         id: 'child3',

@@ -146,7 +146,7 @@ describe('transaction executors', () => {
               .serialize(),
           );
 
-          expect(data.filter(t => t.is_parent).length).toBe(0);
+          expect(data.filter(t => t.isParent).length).toBe(0);
           expect(data.filter(t => t.tombstone).length).toBe(0);
 
           let { data: defaultData } = await runQuery(
@@ -213,7 +213,7 @@ describe('transaction executors', () => {
             let sum = aliveTransactions(arr).reduce((sum, trans) => {
               let amount = trans.amount || 0;
               let matched = (amount < -5 || amount > -2) && trans.payee != null;
-              if (!trans.tombstone && !trans.is_parent && matched) {
+              if (!trans.tombstone && !trans.isParent && matched) {
                 return sum + amount;
               }
               return sum;
@@ -280,7 +280,7 @@ describe('transaction executors', () => {
           }
         }
 
-        if (trans.is_parent) {
+        if (trans.isParent) {
           // Parent transactions should never have a category
           expect(trans.category).toBe(null);
 
@@ -367,11 +367,11 @@ describe('transaction executors', () => {
       let expectedIds = new Set();
 
       // let parents = toGroup(
-      //   arr.filter(t => t.is_parent),
+      //   arr.filter(t => t.isParent),
       //   new Map(Object.entries(groupById(arr.filter(t => t.parent_id))))
       // );
 
-      let parents = groupById(arr.filter(t => t.is_parent && !t.tombstone));
+      let parents = groupById(arr.filter(t => t.isParent && !t.tombstone));
       let matched = new Set();
 
       // Pick out some ids to query

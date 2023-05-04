@@ -702,7 +702,7 @@ describe('Transactions', () => {
     expect(getTransactions().length).toBe(5);
     await userEvent.click(addButton);
     expect(getTransactions().length).toBe(8);
-    expect(getTransactions()[0].is_parent).toBe(true);
+    expect(getTransactions()[0].isParent).toBe(true);
     expect(getTransactions()[0].amount).toBe(-5500);
     expect(getTransactions()[1].is_child).toBe(true);
     expect(getTransactions()[1].amount).toBe(-4500);
@@ -806,7 +806,7 @@ describe('Transactions', () => {
     await userEvent.click(splitButton);
     await waitForAutocomplete();
     expect(getTransactions().length).toBe(6);
-    expect(getTransactions()[0].is_parent).toBe(true);
+    expect(getTransactions()[0].isParent).toBe(true);
     expect(getTransactions()[1].is_child).toBe(true);
     expect(getTransactions()[1].amount).toBe(0);
     expectErrorToExist(getTransactions().slice(0, 2));
@@ -853,7 +853,7 @@ describe('Transactions', () => {
         date: '2017-01-01',
         error: null,
         id: expect.any(String),
-        is_parent: true,
+        isParent: true,
         notes: 'Notes',
         payee: 'payed-to',
         sort_order: 0,

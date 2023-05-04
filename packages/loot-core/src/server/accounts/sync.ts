@@ -30,7 +30,7 @@ function makeSplitTransaction(trans, subtransactions) {
   // We need to calculate the final state of split transactions
   let { subtransactions: sub, ...parent } = recalculateSplit({
     ...trans,
-    is_parent: true,
+    isParent: true,
     subtransactions: subtransactions.map((transaction, idx) =>
       makeChildTransaction(trans, {
         ...transaction,

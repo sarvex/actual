@@ -58,14 +58,14 @@ export function flattenSortTransactions(arr) {
     if (subtransactions.length > 0) {
       list.push({
         ...fields,
-        is_parent: true,
+        isParent: true,
         is_child: false,
         parent_id: null,
       });
       subtransactions.forEach(subtrans => {
         list.push({
           ...subtrans,
-          is_parent: false,
+          isParent: false,
           is_child: true,
           parent_id: trans.id,
           date: trans.date,
@@ -75,7 +75,7 @@ export function flattenSortTransactions(arr) {
     } else {
       list.push({
         ...fields,
-        is_parent: false,
+        isParent: false,
         is_child: false,
         parent_id: null,
       });

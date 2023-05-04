@@ -106,7 +106,7 @@ export class Transaction extends React.PureComponent {
       amount,
       category,
       cleared,
-      is_parent,
+      isParent,
       notes,
       schedule,
     } = transaction;
@@ -130,7 +130,7 @@ export class Transaction extends React.PureComponent {
     );
     let prettyCategory = transferAcct
       ? 'Transfer'
-      : is_parent
+      : isParent
       ? 'Split'
       : categoryName;
 

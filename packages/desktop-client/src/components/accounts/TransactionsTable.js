@@ -600,7 +600,7 @@ export const Transaction = React.memo(function Transaction(props) {
     account: accountId,
     category,
     cleared,
-    is_parent: isParent,
+    isParent,
     _unmatched = false,
     _inverse = false,
   } = transaction;
@@ -1610,7 +1610,7 @@ export let TransactionTable = React.forwardRef((props, ref) => {
 
         afterSave(() => {
           let lastTransaction = getLastTransaction(latestState);
-          let isSplit = lastTransaction.parent_id || lastTransaction.is_parent;
+          let isSplit = lastTransaction.parent_id || lastTransaction.isParent;
 
           if (
             latestState.current.newTransactions[0].error &&
