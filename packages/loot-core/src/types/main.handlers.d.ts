@@ -156,7 +156,7 @@ export interface MainHandlers {
     name;
     type;
     balance;
-    offBudget;
+    offbudget;
     closed?;
   }) => Promise<string>;
 

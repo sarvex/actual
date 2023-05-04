@@ -568,10 +568,10 @@ export async function createTestBudget(handlers) {
     { name: 'Ally Savings', type: 'savings' },
     { name: 'Capital One Checking', type: 'checking' },
     { name: 'HSBC', type: 'checking' },
-    { name: 'Vanguard 401k', type: 'investment', offBudget: 1 },
-    { name: 'Mortgage', type: 'mortgage', offBudget: 1 },
-    { name: 'House Asset', type: 'other', offBudget: 1 },
-    { name: 'Roth IRA', type: 'investment', offBudget: 1 },
+    { name: 'Vanguard 401k', type: 'investment', offbudget: true },
+    { name: 'Mortgage', type: 'mortgage', offbudget: true },
+    { name: 'House Asset', type: 'other', offbudget: true },
+    { name: 'Roth IRA', type: 'investment', offbudget: true },
   ];
   await runMutator(() =>
     batchMessages(async () => {

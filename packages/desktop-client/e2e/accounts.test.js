@@ -25,7 +25,7 @@ test.describe('Accounts', () => {
     const accountPage = await navigation.createAccount({
       name: 'New Account',
       type: 'Checking / Cash',
-      offBudget: false,
+      offbudget: false,
       balance: 100,
     });
 

@@ -223,9 +223,9 @@ export function updateAccount(account) {
   };
 }
 
-export function createAccount(name, type, balance, offBudget) {
+export function createAccount(name, type, balance, offbudget) {
   return async function (dispatch) {
-    let id = await send('account-create', { name, type, balance, offBudget });
+    let id = await send('account-create', { name, type, balance, offbudget });
     await dispatch(getAccounts());
     await dispatch(getPayees());
     return id;

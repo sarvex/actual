@@ -63,7 +63,7 @@ export class Navigation {
     await this.page.getByLabel('Type:').selectOption({ label: data.type });
     await this.page.getByLabel('Balance:').fill(String(data.balance));
 
-    if (data.offBudget) {
+    if (data.offbudget) {
       await this.page.getByLabel('Off-budget').click();
     }
 
