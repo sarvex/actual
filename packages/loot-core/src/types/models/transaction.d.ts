@@ -25,5 +25,5 @@ export interface TransactionEntity {
   schedule?: ScheduleEntity;
   subtransactions?: TransactionEntity[];
   // TODO: remove once properly typed
-  [k: string]: unknown;
+  // [k: string]: unknown;
 }

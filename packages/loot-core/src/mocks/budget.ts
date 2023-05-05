@@ -581,7 +581,7 @@ export async function createTestBudget(handlers) {
     }),
   );
 
-  let payees: PayeeEntity[] = [
+  let payees: (PayeeEntity & { bill?: true })[] = [
     { name: 'Starting Balance' },
     { name: 'Kroger' },
     { name: 'Publix' },
@@ -604,7 +604,9 @@ export async function createTestBudget(handlers) {
     }),
   );
 
-  let categoryGroups: CategoryGroupEntity[] = [
+  let categoryGroups: (CategoryGroupEntity & {
+    categories: { name: string; is_income?: true; id?: string }[];
+  })[] = [
     {
       name: 'Usual Expenses',
       categories: [
@@ -646,7 +648,6 @@ export async function createTestBudget(handlers) {
         isIncome: group.is_income ? 1 : 0,
       });
 
-      // @ts-expect-error Missing proper type refinement
       for (let category of group.categories) {
         category.id = await handlers['category-create']({
           ...category,

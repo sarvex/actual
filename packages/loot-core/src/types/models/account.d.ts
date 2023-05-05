@@ -7,5 +7,5 @@ export interface AccountEntity {
   sort_order?: number;
   tombstone?: boolean;
   // TODO: remove once properly typed
-  [k: string]: unknown;
+  // [k: string]: unknown;
 }

@@ -5,5 +5,5 @@ export interface CategoryGroupEntity {
   sort_order?: number;
   tombstone?: boolean;
   // TODO: remove once properly typed
-  [k: string]: unknown;
+  // [k: string]: unknown;
 }
