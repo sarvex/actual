@@ -5,6 +5,7 @@ import {
   initiallyLoadPayees,
   setUndoEnabled,
 } from 'loot-core/src/client/actions/queries';
+import { useCachedAccounts } from 'loot-core/src/client/data-hooks/accounts';
 import { useSchedules } from 'loot-core/src/client/data-hooks/schedules';
 import q, { runQuery } from 'loot-core/src/client/query-helpers';
 import { send } from 'loot-core/src/platform/client/fetch';
@@ -409,6 +410,14 @@ function ConditionsList({
   isSchedule,
   onChangeConditions,
 }) {
+  let { payees, accounts, categories } = useSelector(state => {
+    return {
+      payees: state.queries.payees,
+      accounts: state.queries.accounts,
+      categories: state.queries.categories.list,
+    };
+  });
+
   function addCondition(index) {
     // (remove the inflow and outflow pseudo-fields since they’d be a pain to get right)
     let fields = conditionFields
@@ -469,6 +478,41 @@ function ConditionsList({
             // the type hasn't changed
             newCond.op = cond.op;
             return newInput(makeValue(cond.value, newCond));
+          } else if (cond.type === 'id' && newCond.type === 'string') {
+            newCond.op = cond.op;
+            let list;
+            if (cond.field === 'payee') {
+              list = payees;
+            } else if (cond.field === 'account') {
+              list = accounts;
+            } else if (cond.field === 'category') {
+              list = categories;
+            } else {
+              console.warn(
+                `ConditionsList: unexpected field when switching from ID to string op: ${cond.field}`,
+              );
+              return newInput(makeValue(null, newCond));
+            }
+
+            if (cond.op === 'is') {
+              let item = list.find(p => p.id === cond.value);
+              return newInput(makeValue(item ? item.name : null, newCond));
+            } else if (cond.op === 'oneOf') {
+              return newInput(
+                makeValue(
+                  (cond.value || []).map(id => {
+                    let item = list.find(p => p.id === id);
+                    return item ? item.name : null;
+                  }),
+                  newCond,
+                ),
+              );
+            } else {
+              console.warn(
+                `ConditionsList: unexpected op when switching from ID to string op: ${cond.op}`,
+              );
+              return newInput(makeValue(null, newCond));
+            }
           } else {
             newCond.op = TYPE_INFO[newCond.type].ops[0];
             return newInput(makeValue(null, newCond));
