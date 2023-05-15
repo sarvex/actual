@@ -481,8 +481,8 @@ export const ManagePayees = forwardRef(
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'center',
-            padding: '0 10px 5px',
+            alignItems: 'flex-end',
+            padding: '0 10px 10px',
           }}
         >
           <View>
@@ -557,7 +557,6 @@ export const ManagePayees = forwardRef(
           <View
             style={{
               flex: 1,
-              border: '1px solid ' + colors.border,
               borderTopLeftRadius: 4,
               borderTopRightRadius: 4,
               overflow: 'hidden',
