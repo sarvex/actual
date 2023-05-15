@@ -814,7 +814,31 @@ function ManageRulesContent({ isModal, payeeId, setLoading }) {
             flexShrink: 0,
           }}
         >
-          <Stack direction="row" align="center" justify="flex-end" spacing={2}>
+          <Stack
+            direction="row"
+            align="center"
+            justify="space-between"
+            spacing={2}
+          >
+            <View
+              style={{
+                color: colors.n4,
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: '50%',
+              }}
+            >
+              <Text>
+                Rules are always run in the order that you see them.{' '}
+                <ExternalLink
+                  asAnchor={true}
+                  href="https://actualbudget.github.io/docs/Budgeting/rules/"
+                  style={{ color: colors.n4 }}
+                >
+                  Learn more
+                </ExternalLink>
+              </Text>
+            </View>{' '}
             {selectedInst.items.size > 0 && (
               <Button onClick={onDeleteSelected}>
                 Delete {selectedInst.items.size} rules

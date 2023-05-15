@@ -485,30 +485,32 @@ export const ManagePayees = forwardRef(
             padding: '0 10px 10px',
           }}
         >
-          <View>
-            <Button
-              bare
-              style={{ marginRight: 10 }}
-              disabled={buttonsDisabled}
-              onClick={() => setMenuOpen(true)}
-            >
-              {buttonsDisabled
-                ? 'No payees selected'
-                : selected.items.size +
-                  ' ' +
-                  plural(selected.items.size, 'payee', 'payees')}
-              <ExpandArrow width={8} height={8} style={{ marginLeft: 5 }} />
-            </Button>
-            {menuOpen && (
-              <PayeeMenu
-                payeesById={payeesById}
-                selectedPayees={selected.items}
-                onClose={() => setMenuOpen(false)}
-                onDelete={onDelete}
-                onMerge={onMerge}
-              />
-            )}
-          </View>
+          {selected.items.size === 0 ? null : (
+            <View>
+              <Button
+                bare
+                style={{ marginRight: 10 }}
+                disabled={buttonsDisabled}
+                onClick={() => setMenuOpen(true)}
+              >
+                {buttonsDisabled
+                  ? 'No payees selected'
+                  : selected.items.size +
+                    ' ' +
+                    plural(selected.items.size, 'payee', 'payees')}
+                <ExpandArrow width={8} height={8} style={{ marginLeft: 5 }} />
+              </Button>
+              {menuOpen && (
+                <PayeeMenu
+                  payeesById={payeesById}
+                  selectedPayees={selected.items}
+                  onClose={() => setMenuOpen(false)}
+                  onDelete={onDelete}
+                  onMerge={onMerge}
+                />
+              )}
+            </View>
+          )}
           <View>
             {(orphanedOnly ||
               (orphanedPayees && orphanedPayees.length > 0)) && (
