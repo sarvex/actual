@@ -238,6 +238,8 @@ function FinancesApp(props) {
     });
 
     return cleanup;
+    // patchedHistory cannot change because we don’t read the setter above
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -280,6 +282,8 @@ function FinancesApp(props) {
         props.savePrefs,
       );
     }, 100);
+    // patchedHistory cannot change because we don’t read the setter above
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

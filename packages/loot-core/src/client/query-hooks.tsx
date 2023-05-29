@@ -17,7 +17,7 @@ function makeContext(queryState, opts, QueryClass) {
 
   function Provider({ children }) {
     let [data, setData] = useState(query.getData());
-    let value = useMemo(() => ({ data, query }), [data, query]);
+    let value = useMemo(() => ({ data, query }), [data]);
 
     useEffect(() => {
       if (query.getNumListeners() !== 0) {

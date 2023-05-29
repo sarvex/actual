@@ -46,13 +46,13 @@ module.exports = {
     'no-loop-func': 'off',
 
     // TODO: re-enable these rules
-    'react-hooks/exhaustive-deps': 'off',
-    // 'react-hooks/exhaustive-deps': [
-    //   'error',
-    //   {
-    //     additionalHooks: 'useLiveQuery',
-    //   },
-    // ],
+    // 'react-hooks/exhaustive-deps': 'off',
+    'react-hooks/exhaustive-deps': [
+      'error',
+      {
+        additionalHooks: 'useLiveQuery',
+      },
+    ],
 
     'import/no-useless-path-segments': 'error',
     'import/order': [
