@@ -96,12 +96,12 @@ export function runQuery(
   sql: string,
   params?: Array<string | number>,
   fetchAll?: false,
-);
+): { changes: number };
 export function runQuery(
   sql: string,
   params: Array<string | number> | undefined,
   fetchAll: true,
-);
+): ;
 export function runQuery(sql, params, fetchAll) {
   // const unrecord = perf.record('sqlite');
   const result = sqlite.runQuery(db, sql, params, fetchAll);

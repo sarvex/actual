@@ -1,49 +1,55 @@
 import { listen, send } from '../platform/client/fetch';
 import { once } from '../shared/async';
-import q, { getPrimaryOrderBy } from '../shared/query';
+import q, { getPrimaryOrderBy, type Query } from '../shared/query';
 export default q;
 
 export async function runQuery(query) {
   return send('query', query.serialize());
 }
 
-export function liveQuery(query, onData?, opts?): LiveQuery {
+export function liveQuery(query: Query, onData?, opts?): LiveQuery {
   let q = new LiveQuery(query, onData, opts);
   q.run();
   return q;
 }
 
-export function pagedQuery(query, onData?, opts?): PagedQuery {
+export function pagedQuery(query: Query, onData?, opts?): PagedQuery {
   let q = new PagedQuery(query, onData, opts);
   q.run();
   return q;
 }
 
+type Listener<Data> = (data: Data, prevData: Data | null) => void;
+
 // Subscribe and refetch
-export class LiveQuery {
+export class LiveQuery<Data, MappedData> {
   _unsubscribe;
-  data;
+  data: Data | null;
   dependencies;
   error;
-  listeners;
-  mappedData;
-  mapper;
-  onlySync;
-  query;
+  listeners: Listener<MappedData>[];
+  mappedData: MappedData | null;
+  mapper: Data extends MappedData;
+  onlySync: boolean;
+  query: Query;
 
   // Async coordination
   inflight;
   inflightRequestId;
   restart;
 
-  constructor(query, onData?, opts: { mapper?; onlySync?: boolean } = {}) {
+  constructor(
+    query: Query,
+    onData?: Listener<MappedData>,
+    opts: { mapper?; onlySync?: boolean } = {},
+  ) {
     this.error = new Error();
     this.query = query;
     this.data = null;
     this.mappedData = null;
     this.dependencies = null;
     this.mapper = opts.mapper;
-    this.onlySync = opts.onlySync;
+    this.onlySync = opts.onlySync ?? false;
     this.listeners = [];
 
     // Async coordination
@@ -55,7 +61,7 @@ export class LiveQuery {
     }
   }
 
-  addListener(func) {
+  addListener(func: Listener<MappedData>) {
     this.listeners.push(func);
 
     return () => {
@@ -63,7 +69,7 @@ export class LiveQuery {
     };
   }
 
-  onData = (data, prevData) => {
+  onData = (data: MappedData, prevData: MappedData | null) => {
     for (let i = 0; i < this.listeners.length; i++) {
       this.listeners[i](data, prevData);
     }
@@ -140,7 +146,7 @@ export class LiveQuery {
     }
   };
 
-  mapData = data => {
+  mapData = (data: Data): MappedData => {
     if (this.mapper) {
       return this.mapper(data);
     }
@@ -163,9 +169,12 @@ export class LiveQuery {
     return this._unsubscribe != null;
   };
 
-  _optimisticUpdate = (dataFunc, mappedDataFunc) => {
-    this.data = dataFunc(this.data);
-    this.mappedData = mappedDataFunc(this.mappedData);
+  _optimisticUpdate = (
+    dataFunc: (data: Data) => Data,
+    mappedDataFunc: (data: MappedData) => MappedData,
+  ) => {
+    this.data = dataFunc(this.data!);
+    this.mappedData = mappedDataFunc(this.mappedData!);
   };
 
   optimisticUpdate = (dataFunc, mappedDataFunc) => {

@@ -4,29 +4,29 @@ export async function init(): unknown;
 
 export function _getModule(): SqlJsStatic;
 
-export function prepare(db, sql): unknown;
+export function prepare(db: Database, sql): unknown;
 
 export function runQuery(
-  db: unknown,
+  db: Database,
   sql: string,
   params?: (string | number)[],
   fetchAll?: false,
 ): { changes: unknown };
 export function runQuery<T>(
-  db: unknown,
+  db: Database,
   sql: string,
   params: (string | number)[],
   fetchAll: true,
 ): T[];
 
-export function execQuery(db, sql): void;
+export function execQuery(db: Database, sql): void;
 
-export function transaction(db, fn): unknown;
+export function transaction(db: Database, fn): unknown;
 
-export async function asyncTransaction(db, fn): unknown;
+export async function asyncTransaction(db: Database, fn): unknown;
 
 export async function openDatabase(pathOrBuffer?: string | Buffer): Database;
 
-export function closeDatabase(db): void;
+export function closeDatabase(db: Database): void;
 
-export async function exportDatabase(db): Buffer;
+export async function exportDatabase(db: Database): Buffer;

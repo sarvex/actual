@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { removeFile, readFile } from '../fs';
 
+import type * as T from '.';
+
 function verifyParamTypes(sql, arr) {
   arr.forEach(val => {
     if (typeof val !== 'string' && typeof val !== 'number' && val !== null) {
@@ -14,16 +16,21 @@ function verifyParamTypes(sql, arr) {
 
 export async function init() {}
 
-export function prepare(db, sql) {
+export const prepare: typeof T.prepare = (db, sql) => {
   return db.prepare(sql);
-}
+};
 
-export function runQuery(db, sql, params = [], fetchAll) {
+export const runQuery: typeof T.runQuery = (
+  db: Database.Database,
+  sql: string,
+  params = [],
+  fetchAll: boolean,
+): unknown[] | { changes: number } => {
   if (params) {
     verifyParamTypes(sql, params);
   }
 
-  let stmt;
+  let stmt: Database.Statement;
   try {
     stmt = typeof sql === 'string' ? db.prepare(sql) : sql;
   } catch (e) {
@@ -48,7 +55,7 @@ export function runQuery(db, sql, params = [], fetchAll) {
       throw e;
     }
   }
-}
+};
 
 export function execQuery(db, sql) {
   db.exec(sql);
