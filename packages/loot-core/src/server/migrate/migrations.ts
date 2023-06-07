@@ -3,15 +3,13 @@
 // we can remove this migration.
 import { v4 as uuidv4 } from 'uuid';
 
-import m1632571489012 from '../../../migrations/1632571489012_remove_cache';
 import * as fs from '../../platform/server/fs';
 import * as sqlite from '../../platform/server/sqlite';
 
 let MIGRATIONS_DIR = fs.migrationsPath;
 
-let javascriptMigrations = {
-  1632571489012: m1632571489012,
-};
+let newestRemovedMigration = 1632571489012;
+let javascriptMigrations = {};
 
 export async function withMigrationsDir(dir, func) {
   let oldDir = MIGRATIONS_DIR;
@@ -123,6 +121,12 @@ function checkDatabaseValidity(appliedIds, available) {
 
 export async function migrate(db) {
   let appliedIds = await getAppliedMigrations(db);
+  if (appliedIds.find(id => id <= newestRemovedMigration)) {
+    await sqlite.runQuery(db, 'DELETE FROM __migrations__ WHERE id <= ?', [
+      newestRemovedMigration,
+    ]);
+    appliedIds = await getAppliedMigrations(db);
+  }
   let available = await getMigrationList(MIGRATIONS_DIR);
 
   checkDatabaseValidity(appliedIds, available);
