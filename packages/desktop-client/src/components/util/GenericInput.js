@@ -33,9 +33,13 @@ export default function GenericInput({
 
   // This makes the UI more resilient in case of faulty data
   if (multi && !Array.isArray(value)) {
-    value = [];
+    if (value != null && type !== 'id') {
+      value = [value];
+    } else {
+      value = [];
+    }
   } else if (!multi && Array.isArray(value)) {
-    return null;
+    value = value[0];
   }
 
   let showPlaceholder = multi ? value.length === 0 : true;
