@@ -138,6 +138,7 @@ function ConfigureField({
   value,
   dispatch,
   onApply,
+  onCancel,
 }) {
   let [subfield, setSubfield] = useState(initialSubfield);
   let inputRef = useRef();
@@ -158,6 +159,16 @@ function ConfigureField({
   if (subfield === 'month' || subfield === 'year') {
     ops = ['is'];
   }
+
+  const handleApply = e => {
+    e.preventDefault();
+    onApply({
+      field,
+      op,
+      value,
+      options: subfieldToOptions(field, subfield),
+    });
+  };
 
   return (
     <Tooltip
@@ -251,22 +262,32 @@ function ConfigureField({
             />
           )}
 
-          <View>
-            <Button
-              primary
-              style={{ marginTop: 15 }}
-              onClick={e => {
-                e.preventDefault();
-                onApply({
-                  field,
-                  op,
-                  value,
-                  options: subfieldToOptions(field, subfield),
-                });
-              }}
-            >
-              Apply
-            </Button>
+          <View
+            style={{
+              marginTop: 15,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            {onCancel ? (
+              <>
+                <Button
+                  onClick={e => {
+                    e.preventDefault();
+                    onCancel();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button primary onClick={handleApply}>
+                  Apply
+                </Button>
+              </>
+            ) : (
+              <Button style={{ flexGrow: 1 }} primary onClick={handleApply}>
+                Apply
+              </Button>
+            )}
           </View>
         </form>
       </FocusScope>
@@ -418,6 +439,7 @@ function FilterEditor({ field, op, value, options, onSave, onClose }) {
         onSave(cond);
         onClose();
       }}
+      onCancel={onClose}
     />
   );
 }
