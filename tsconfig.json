@@ -15,6 +15,7 @@
     "downlevelIteration": true,
     // TODO: enable once every file is ts
     // "strict": true,
+    "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "jsx": "preserve",
@@ -28,7 +29,7 @@
     // Until/if we build using tsc
     "noEmit": true
   },
-  "include": ["packages/**/*"],
+  "include": ["packages/*/src/**/*"],
   "exclude": ["**/node_modules/*", "**/build/*", "**/lib-dist/*"],
   "ts-node": {
     "compilerOptions": {
