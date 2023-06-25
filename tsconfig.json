@@ -29,7 +29,6 @@
     // Until/if we build using tsc
     "noEmit": true
   },
-  "include": ["packages/*/src/**/*"],
   "exclude": ["**/node_modules/*", "**/build/*", "**/lib-dist/*"],
   "ts-node": {
     "compilerOptions": {

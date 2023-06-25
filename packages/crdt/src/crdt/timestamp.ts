@@ -32,7 +32,7 @@ export type Clock = {
 };
 
 // A mutable global clock
-let clock: Clock = null;
+let clock: Clock | null = null;
 
 export function setClock(clock_: Clock): void {
   clock = clock_;
@@ -148,9 +148,10 @@ export class Timestamp {
   /**
    * maximum timestamp
    */
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   static max = Timestamp.parse(
     '9999-12-31T23:59:59.999Z-FFFF-FFFFFFFFFFFFFFFF',
-  );
+  )!;
 
   /**
    * timestamp parsing
@@ -287,11 +288,11 @@ export class Timestamp {
   /**
    * zero/minimum timestamp
    */
-  static zero = Timestamp.parse(
-    '1970-01-01T00:00:00.000Z-0000-0000000000000000',
-  );
+  static zero =
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    Timestamp.parse('1970-01-01T00:00:00.000Z-0000-0000000000000000')!;
 
-  static since = isoString => isoString + '-0000-0000000000000000';
+  static since = (isoString: string) => isoString + '-0000-0000000000000000';
 
   /**
    * error classes

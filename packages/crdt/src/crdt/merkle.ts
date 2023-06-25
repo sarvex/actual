@@ -86,7 +86,7 @@ export function diff(trie1: TrieNode, trie2: TrieNode): number {
     let keys = [...keyset.values()];
     keys.sort();
 
-    let diffkey = null;
+    let diffkey: string | null = null;
 
     // Traverse down the trie through keys that aren't the same. We
     // traverse down the keys in order. Stop in two cases: either one

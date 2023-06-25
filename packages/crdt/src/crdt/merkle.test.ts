@@ -14,6 +14,13 @@ function insertMessages(trie, messages) {
   return trie;
 }
 
+function unwrap<T>(x: T | null | undefined): T {
+  expect(x).not.toBeNull();
+  expect(x).toBeDefined();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return x!;
+}
+
 describe('merkle trie', () => {
   test('adding an item works', () => {
     let trie = merkle.insert(
@@ -51,7 +58,7 @@ describe('merkle trie', () => {
     trie2 = merkle.insert(trie2, messages[4].timestamp);
     expect(trie2.hash).toBe(108);
 
-    expect(new Date(merkle.diff(trie1, trie2)).toISOString()).toBe(
+    expect(new Date(unwrap(merkle.diff(trie1, trie2))).toISOString()).toBe(
       '2018-11-02T17:15:00.000Z',
     );
 
@@ -137,26 +144,26 @@ describe('merkle trie', () => {
     ]);
 
     // Normal comparision works
-    expect(new Date(merkle.diff(trie1, trie)).toISOString()).toBe(
+    expect(new Date(unwrap(merkle.diff(trie1, trie))).toISOString()).toBe(
       '2018-11-01T00:54:00.000Z',
     );
 
     // Comparing the pruned new trie is lossy, so it returns an even older time
-    expect(new Date(merkle.diff(merkle.prune(trie1), trie)).toISOString()).toBe(
-      '2018-11-01T00:45:00.000Z',
-    );
+    expect(
+      new Date(unwrap(merkle.diff(merkle.prune(trie1), trie))).toISOString(),
+    ).toBe('2018-11-01T00:45:00.000Z');
 
     // Comparing the pruned original trie is just as lossy
-    expect(new Date(merkle.diff(trie1, merkle.prune(trie))).toISOString()).toBe(
-      '2018-11-01T00:45:00.000Z',
-    );
+    expect(
+      new Date(unwrap(merkle.diff(trie1, merkle.prune(trie)))).toISOString(),
+    ).toBe('2018-11-01T00:45:00.000Z');
 
     // Pruning both tries is just as lossy as well, since the changed
     // key is pruned away in both cases and it won't find a changed
     // key so it bails at the point
     expect(
       new Date(
-        merkle.diff(merkle.prune(trie1), merkle.prune(trie)),
+        unwrap(merkle.diff(merkle.prune(trie1), merkle.prune(trie))),
       ).toISOString(),
     ).toBe('2018-11-01T00:45:00.000Z');
 
@@ -169,19 +176,19 @@ describe('merkle trie', () => {
     ]);
 
     // Normal comparision works
-    expect(new Date(merkle.diff(trie2, trie)).toISOString()).toBe(
+    expect(new Date(unwrap(merkle.diff(trie2, trie))).toISOString()).toBe(
       '2018-11-01T00:54:00.000Z',
     );
 
     // Same as case 1
-    expect(new Date(merkle.diff(merkle.prune(trie2), trie)).toISOString()).toBe(
-      '2018-11-01T00:45:00.000Z',
-    );
+    expect(
+      new Date(unwrap(merkle.diff(merkle.prune(trie2), trie))).toISOString(),
+    ).toBe('2018-11-01T00:45:00.000Z');
 
     // Same as case 1
-    expect(new Date(merkle.diff(trie2, merkle.prune(trie))).toISOString()).toBe(
-      '2018-11-01T00:45:00.000Z',
-    );
+    expect(
+      new Date(unwrap(merkle.diff(trie2, merkle.prune(trie)))).toISOString(),
+    ).toBe('2018-11-01T00:45:00.000Z');
 
     // Pruning both tries is very lossy and this ends up returning a
     // time that only covers the second message. Syncing will need
@@ -190,7 +197,7 @@ describe('merkle trie', () => {
     // ignores the first message.
     expect(
       new Date(
-        merkle.diff(merkle.prune(trie2), merkle.prune(trie)),
+        unwrap(merkle.diff(merkle.prune(trie2), merkle.prune(trie))),
       ).toISOString(),
     ).toBe('2018-11-01T01:12:00.000Z');
   });

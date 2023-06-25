@@ -25,7 +25,8 @@ describe('Timestamp', function () {
 
   describe('parsing', function () {
     it('should not parse', function () {
-      let invalidInputs = [
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let invalidInputs: any[] = [
         null,
         undefined,
         {},
@@ -55,6 +56,9 @@ describe('Timestamp', function () {
       for (let validInput of validInputs) {
         let parsed = Timestamp.parse(validInput);
         expect(typeof parsed).toBe('object');
+        if (!parsed) {
+          throw new Error('parsed is null');
+        }
         expect(parsed.millis() >= 0).toBeTruthy();
         expect(parsed.millis() < 253402300800000).toBeTruthy();
         expect(parsed.counter() >= 0).toBeTruthy();
