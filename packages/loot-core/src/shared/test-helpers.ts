@@ -1,8 +1,29 @@
-export let tracer = null;
+export function unwrap<T>(value: T | null | undefined): T {
+  expect(value).not.toBeNull();
+  expect(value).toBeDefined();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return value!;
+}
 
-function timeout(promise, n) {
+type Tracer = {
+  event(name: string, data?: unknown): void;
+  wait(name: string): Promise<unknown>;
+  expectWait<T>(name: string, data: (data: unknown) => T): Promise<T>;
+  expectWait<T>(name: string, data: T): Promise<void>;
+  expectNow(name: string, data?: unknown): void;
+  expect(name: string, data?: unknown): void | Promise<void>;
+  start(): void;
+  end(): void;
+};
+
+export let tracer: Tracer | null = null;
+
+function timeout<T, N extends number>(
+  promise: Promise<T>,
+  n: N,
+): Promise<T | `timeout(${N})`> {
   let resolve;
-  let timeoutPromise = new Promise(_ => (resolve = _));
+  let timeoutPromise = new Promise<`timeout(${N})`>(_ => (resolve = _));
   let timer = setTimeout(() => resolve(`timeout(${n})`), n);
 
   return Promise.race([
@@ -18,16 +39,20 @@ export function resetTracer() {
   tracer = execTracer();
 }
 
-export function execTracer() {
-  let queue = [];
+export function execTracer(): Tracer {
+  let queue: { name: string; data: unknown }[] = [];
   let hasStarted = false;
-  let waitingFor = null;
+  let waitingFor: {
+    resolve: (value: unknown) => void;
+    reject: (error: unknown) => void;
+    name: string;
+  } | null = null;
   let ended = false;
 
   let log = false;
 
   return {
-    event(name: string, data?: unknown) {
+    event(name, data) {
       if (!hasStarted) {
         return;
       } else if (log) {
@@ -108,7 +133,8 @@ export function execTracer() {
           `Expected event “${name}” but none found - has it happened yet?`,
         );
       } else if (queue[0].name === name) {
-        let entry = queue.shift();
+        let entry = queue[0];
+        queue.shift();
 
         if (typeof data === 'function') {
           data(entry.data);
@@ -122,7 +148,7 @@ export function execTracer() {
       }
     },
 
-    expect(name: string, data?: unknown) {
+    expect(name, data) {
       if (queue.length === 0) {
         return this.expectWait(name, data);
       }

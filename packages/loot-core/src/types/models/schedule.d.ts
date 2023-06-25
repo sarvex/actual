@@ -4,7 +4,7 @@ import type { RuleEntity } from './rule';
 
 export interface ScheduleEntity {
   id?: string;
-  name?: string;
+  name?: string | null;
   rule: RuleEntity;
   next_date: string;
   completed: boolean;

@@ -31,6 +31,11 @@ function splitError(amount) {
   return { difference: amount, type: 'SplitTransactionError', version: 1 };
 }
 
+function checkPresent<T>(value: T | null | undefined): asserts value is T {
+  expect(value).toBeDefined();
+  expect(value).not.toBeNull();
+}
+
 describe('Transactions', () => {
   test('updating a transaction works', () => {
     let transactions = [
@@ -42,6 +47,7 @@ describe('Transactions', () => {
       id: 't1',
       amount: 5000,
     });
+    checkPresent(data);
     expect(data.find(d => d.subtransactions)).toBeFalsy();
     expect(diff).toEqual({
       added: [],
@@ -64,6 +70,7 @@ describe('Transactions', () => {
       id: 't1',
       amount: 5000,
     });
+    checkPresent(data);
     expect(diff).toEqual({ added: [], deleted: [], updated: [] });
     expect(data.map(t => ({ id: t.id, amount: t.amount })).sort()).toEqual([
       { id: expect.any(String), amount: 5000 },
@@ -79,6 +86,7 @@ describe('Transactions', () => {
     ];
     let { data, diff } = deleteTransaction(transactions, 't1');
 
+    checkPresent(data);
     expect(diff).toEqual({
       added: [],
       deleted: [{ id: 't1' }],
@@ -96,6 +104,7 @@ describe('Transactions', () => {
       makeTransaction({ amount: 3000 }),
     ];
     let { data, diff } = splitTransaction(transactions, 't1');
+    checkPresent(data);
     expect(data.find(d => d.subtransactions)).toBeFalsy();
 
     expect(diff).toEqual({
@@ -134,6 +143,7 @@ describe('Transactions', () => {
 
     // Should be able to pass in any id from the split trans
     let { data, diff } = addSplitTransaction(transactions, 't1');
+    checkPresent(data);
     expect(data.find(d => d.subtransactions)).toBeFalsy();
 
     expect(data.filter(t => t.parent_id === 't1').length).toBe(3);
@@ -164,6 +174,7 @@ describe('Transactions', () => {
       id: 't2',
       amount: 2200,
     });
+    checkPresent(data);
     expect(data.find(d => d.subtransactions)).toBeFalsy();
     expect(diff).toEqual({
       added: [],

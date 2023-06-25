@@ -70,7 +70,7 @@ export function liveQueryContext(query, opts) {
 }
 
 export function useLiveQuery(makeQuery: () => Query, deps: DependencyList) {
-  let [data, setData] = useState(null);
+  let [data, setData] = useState<unknown[] | null>(null);
   let query = useMemo(makeQuery, deps);
 
   useEffect(() => {

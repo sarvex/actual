@@ -4,11 +4,11 @@ import q from '../query-helpers';
 import { useLiveQuery } from '../query-hooks';
 import { getAccountsById } from '../reducers/queries';
 
-function useAccounts() {
+function useAccounts(): unknown[] | null {
   return useLiveQuery(() => q('accounts').select('*'), []);
 }
 
-let AccountsContext = createContext(null);
+let AccountsContext = createContext<unknown[] | null>(null);
 
 export function AccountsProvider({ children }) {
   let data = useAccounts();
@@ -20,7 +20,7 @@ export function CachedAccounts({ children, idKey }) {
   return children(data);
 }
 
-export function useCachedAccounts({ idKey }: { idKey? } = {}) {
+export function useCachedAccounts({ idKey }: { idKey? } = {}): unknown[] {
   let data = useContext(AccountsContext);
   return idKey && data ? getAccountsById(data) : data;
 }

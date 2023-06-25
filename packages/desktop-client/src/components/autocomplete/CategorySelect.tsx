@@ -36,7 +36,7 @@ function CategoryList({
   embedded,
   footer,
 }: CategoryListProps) {
-  let lastGroup = null;
+  let lastGroup: unknown = null;
 
   return (
     <View>

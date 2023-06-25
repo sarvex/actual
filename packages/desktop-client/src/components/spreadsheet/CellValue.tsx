@@ -20,7 +20,7 @@ type CellValueProps = {
   type?: string;
   formatter?: (value) => ReactNode;
   style?: CSSProperties;
-  getStyle?: (value) => CSSProperties;
+  getStyle?: (value) => CSSProperties | null | undefined;
   privacyFilter?: ConditionalPrivacyFilterProps['privacyFilter'];
 };
 

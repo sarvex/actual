@@ -2,13 +2,17 @@ import React, { type ReactNode, createContext, useContext } from 'react';
 
 import * as monthUtils from 'loot-core/src/shared/months';
 
-let Context = createContext(null);
-
-type RolloverContextProps = {
+type RolloverContextValue = {
+  currentMonth: string;
   categoryGroups: unknown[];
   summaryCollapsed: boolean;
   onBudgetAction: (idx: number, action: string, arg?: unknown) => void;
   onToggleSummaryCollapse: () => void;
+};
+
+let Context = createContext<RolloverContextValue | null>(null);
+
+type RolloverContextProps = Omit<RolloverContextValue, 'currentMonth'> & {
   children: ReactNode;
 };
 export function RolloverContext({
@@ -34,6 +38,10 @@ export function RolloverContext({
   );
 }
 
-export function useRollover() {
-  return useContext(Context);
+export function useRollover(): RolloverContextValue {
+  let value = useContext(Context);
+  if (value === null) {
+    throw new Error('useRollover must be used within a RolloverContext');
+  }
+  return value;
 }

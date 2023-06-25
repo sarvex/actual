@@ -127,7 +127,7 @@ function makeGen({
   });
 }
 
-let generators = [];
+let generators: ReturnType<typeof makeGen>[] = [];
 Object.keys(schema).forEach(table => {
   Object.keys(schema[table]).reduce((obj, field) => {
     if (table === 'spreadsheet_cells' && field === 'expr') {
@@ -187,15 +187,15 @@ function shuffle(arr) {
   return shuffled;
 }
 
-function divide(arr) {
-  let res = [];
+function divide<T>(arr: T[]) {
+  let res: T[][] = [];
   for (let i = 0; i < arr.length; i += 10) {
     res.push(arr.slice(i, i + 10));
   }
   return res;
 }
 
-async function run(msgs) {
+async function run(msgs: sync.Message[]) {
   mockSyncServer.reset();
 
   // Do some post-processing of the data
@@ -219,7 +219,10 @@ async function run(msgs) {
 
       return acc;
     },
-    { firstMessages: [], secondMessages: [] },
+    {
+      firstMessages: new Array<sync.Message>(),
+      secondMessages: new Array<sync.Message>(),
+    },
   );
 
   prefs.loadPrefs();
@@ -255,7 +258,7 @@ async function run(msgs) {
       res.secondMessages.map(x => ({
         ...x,
         value: sync.serializeValue(x.value),
-        timestamp: x.timestamp.toString(),
+        timestamp: x.timestamp,
       })),
     ),
   );
@@ -274,7 +277,7 @@ async function run(msgs) {
       res.secondMessages.map(x => ({
         ...x,
         value: sync.serializeValue(x.value),
-        timestamp: x.timestamp.toString(),
+        timestamp: x.timestamp,
       })),
     ),
   );

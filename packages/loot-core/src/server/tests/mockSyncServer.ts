@@ -56,7 +56,7 @@ handlers['/sync/sync'] = async (data: Uint8Array): Promise<Uint8Array> => {
 
       currentClock.merkle = merkle.insert(
         currentClock.merkle,
-        Timestamp.parse(msg.getTimestamp()),
+        Timestamp.parse(msg.getTimestamp())!,
       );
     }
   });

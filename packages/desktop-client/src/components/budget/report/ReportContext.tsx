@@ -2,7 +2,14 @@ import React, { type ReactNode, createContext, useContext } from 'react';
 
 import * as monthUtils from 'loot-core/src/shared/months';
 
-let Context = createContext(null);
+type ReportContext = {
+  currentMonth: string;
+  summaryCollapsed: boolean;
+  onBudgetAction: (idx: number, action: string, arg: unknown) => void;
+  onToggleSummaryCollapse: () => void;
+};
+
+let Context = createContext<ReportContext | null>(null);
 
 type ReportProviderProps = {
   summaryCollapsed: boolean;
@@ -32,5 +39,9 @@ export function ReportProvider({
 }
 
 export function useReport() {
-  return useContext(Context);
+  let value = useContext(Context);
+  if (value === null) {
+    throw new Error('useReport must be used within a ReportProvider');
+  }
+  return value;
 }

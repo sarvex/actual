@@ -37,7 +37,7 @@ function getItemName(item) {
   return item.name || '';
 }
 
-function getItemId(item) {
+function getItemId(item): string {
   if (typeof item === 'string') {
     return item;
   }
@@ -179,7 +179,7 @@ function SingleAutocomplete({
     () => filterSuggestions(suggestions, value),
     [filterSuggestions, suggestions, value],
   );
-  const [highlightedIndex, setHighlightedIndex] = useState(null);
+  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(embedded);
 
   // Update the selected item if the suggestion list or initial
@@ -236,7 +236,7 @@ function SingleAutocomplete({
           // us that we will clear out local state before cWRP runs.
           // YEAH THAT'S ALL OK I JUST WANT TO SHIP THIS
           setTimeout(() => {
-            onSelect(getItemId(item), inputValue);
+            onSelect(getItemId(item), inputValue!);
           }, 0);
         }
       }}
@@ -314,7 +314,7 @@ function SingleAutocomplete({
           'highlightedIndex' in changes &&
           changes.type !== Downshift.stateChangeTypes.changeInput
         ) {
-          setHighlightedIndex(changes.highlightedIndex);
+          setHighlightedIndex(changes.highlightedIndex ?? null);
         }
         if ('selectedItem' in changes) {
           setSelectedItem(changes.selectedItem);

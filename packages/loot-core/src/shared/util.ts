@@ -126,7 +126,7 @@ export function diffItems<T extends Id>(
   let grouped = _groupById(items);
   let newGrouped = _groupById(newItems);
   let added: T[] = [];
-  let updated: T[] = [];
+  let updated: PartialWithId<T>[] = [];
 
   let deleted = items
     .filter(item => !newGrouped.has(item.id))
@@ -349,7 +349,7 @@ export function integerToAmount(n: number) {
 // financial files and we don't want to parse based on the user's
 // number format, because the user could be importing from many
 // currencies. We extract out the numbers and just ignore separators.
-export function looselyParseAmount(amount: string): number {
+export function looselyParseAmount(amount: string): number | null {
   function safeNumber(v: number) {
     return isNaN(v) ? null : v;
   }

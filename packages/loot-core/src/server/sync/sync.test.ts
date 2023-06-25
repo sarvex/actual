@@ -1,5 +1,6 @@
 import { getClock, Timestamp } from '@actual-app/crdt';
 
+import { unwrap } from '../../shared/test-helpers';
 import * as db from '../db';
 import * as prefs from '../prefs';
 import * as sheet from '../sheet';
@@ -26,7 +27,7 @@ describe('Sync', () => {
     prefs.loadPrefs();
     prefs.savePrefs({ groupId: 'group' });
 
-    let timestamp = Timestamp.send();
+    let timestamp = unwrap(Timestamp.send());
     await sendMessages([
       {
         dataset: 'transactions',
@@ -39,7 +40,7 @@ describe('Sync', () => {
 
     global.stepForwardInTime();
 
-    timestamp = Timestamp.send();
+    timestamp = unwrap(Timestamp.send());
     await sendMessages([
       {
         dataset: 'transactions',
@@ -104,15 +105,17 @@ describe('Sync', () => {
       await encoder.encode(
         'group',
         'client',
-        Timestamp.parse('1970-01-01T01:17:37.000Z-0000-0000testinguuid2'),
+        unwrap(
+          Timestamp.parse('1970-01-01T01:17:37.000Z-0000-0000testinguuid2'),
+        ),
         [
           {
             dataset: 'transactions',
             row: 'foo',
             column: 'amount',
             value: 'N:3200',
-            timestamp: Timestamp.parse(
-              '1970-01-02T05:17:36.789Z-0000-0000testinguuid2',
+            timestamp: unwrap(
+              Timestamp.parse('1970-01-02T05:17:36.789Z-0000-0000testinguuid2'),
             ),
           },
           {
@@ -120,8 +123,8 @@ describe('Sync', () => {
             row: 'foo',
             column: 'amount',
             value: 'N:4200',
-            timestamp: Timestamp.parse(
-              '1970-01-02T10:17:36.999Z-0000-0000testinguuid2',
+            timestamp: unwrap(
+              Timestamp.parse('1970-01-02T10:17:36.999Z-0000-0000testinguuid2'),
             ),
           },
         ],

@@ -13,6 +13,7 @@ import {
   getStatus,
   getScheduledAmount,
 } from '../../shared/schedules';
+import { ScheduleEntity } from '../../types/models';
 import { Rule, Condition } from '../accounts/rules';
 import { addTransactions } from '../accounts/sync';
 import {
@@ -204,6 +205,9 @@ async function checkIfScheduleExists(name, scheduleId) {
 export async function createSchedule({
   schedule = null,
   conditions = [],
+}: {
+  schedule?: ScheduleEntity | null;
+  conditions?: Condition[];
 } = {}) {
   let scheduleId = (schedule && schedule.id) || uuidv4();
 

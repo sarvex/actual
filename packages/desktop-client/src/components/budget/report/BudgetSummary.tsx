@@ -292,7 +292,7 @@ function Saved({ projected, style }: SavedProps) {
 }
 
 type BudgetSummaryProps = {
-  month?: string;
+  month: string;
 };
 export function BudgetSummary({ month }: BudgetSummaryProps) {
   let {

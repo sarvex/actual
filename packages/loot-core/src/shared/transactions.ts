@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { last, diffItems, applyChanges } from './util';
+import { diffItems, applyChanges } from './util';
 
 export function isPreviewId(id) {
   return id.indexOf('preview/') !== -1;
@@ -168,7 +168,6 @@ export function addSplitTransaction(transactions, id) {
     trans.subtransactions.push(
       makeChild(trans, {
         amount: 0,
-        // @ts-expect-error Need to define a Transaction type
         sort_order: num(prevSub && prevSub.sort_order) - 1,
       }),
     );
