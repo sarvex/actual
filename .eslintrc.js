@@ -27,7 +27,11 @@ const restrictedImportPatterns = [
 
 module.exports = {
   plugins: ['prettier', 'import', 'rulesdir', '@typescript-eslint'],
-  extends: ['react-app', 'plugin:@typescript-eslint/recommended'],
+  extends: [
+    'react-app',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: { project: [path.join(__dirname, './tsconfig.json')] },
   reportUnusedDisableDirectives: true,
@@ -125,18 +129,41 @@ module.exports = {
     ],
     'no-restricted-imports': ['error', { patterns: restrictedImportPatterns }],
 
+    '@typescript-eslint/require-await': 'off',
+    '@typescript-eslint/no-misused-promises': [
+      'error',
+      { checksVoidReturn: false },
+    ],
+
     // Rules disable during TS migration
     '@typescript-eslint/no-var-requires': 'off',
     'prefer-const': 'off',
     'prefer-spread': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-call': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
+    '@typescript-eslint/restrict-plus-operands': 'off',
+    '@typescript-eslint/restrict-template-expressions': [
+      'error',
+      { allowAny: true },
+    ],
   },
   overrides: [
     {
       files: ['.eslintrc.js', './**/.eslintrc.js'],
       parserOptions: { project: null },
       rules: {
+        '@typescript-eslint/await-thenable': 'off',
         '@typescript-eslint/consistent-type-exports': 'off',
+        '@typescript-eslint/no-floating-promises': 'off',
+        '@typescript-eslint/no-implied-eval': 'off',
+        '@typescript-eslint/no-misused-promises': 'off',
+        '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+        '@typescript-eslint/restrict-template-expressions': 'off',
+        '@typescript-eslint/unbound-method': 'off',
       },
     },
     {
