@@ -134,6 +134,7 @@ module.exports = {
       'error',
       { checksVoidReturn: false },
     ],
+    '@typescript-eslint/no-floating-promises': 'off',
 
     // Rules disable during TS migration
     '@typescript-eslint/no-var-requires': 'off',
@@ -207,6 +208,16 @@ module.exports = {
               },
             ],
           },
+        ],
+      },
+    },
+    {
+      files: ['./packages/loot-core/src/**/*'],
+      rules: {
+        // defining 'src' to check all packages is slow, so only do it for loot-core
+        'import/no-unused-modules': [
+          'error',
+          { unusedExports: true, src: ['../**/*.{js,ts,tsx}'] },
         ],
       },
     },

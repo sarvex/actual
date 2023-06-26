@@ -590,7 +590,7 @@ function ManageRulesContent({ isModal, payeeId, setLoading }) {
       setRules(loadedRules.slice(0, 100));
       setLoading(false);
 
-      await dispatch(initiallyLoadPayees());
+      dispatch(initiallyLoadPayees());
     }
 
     undo.setUndoState('openModal', 'manage-rules');

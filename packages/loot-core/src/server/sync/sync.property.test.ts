@@ -93,6 +93,14 @@ let baseTime = 1565374471903;
 let clientId1 = '80dd7da215247293';
 let clientId2 = '90xU1sd5124329ac';
 
+type Generator = {
+  dataset: string;
+  row: string;
+  column: string;
+  value: unknown;
+  timestamp: Timestamp;
+};
+
 function makeGen({
   table,
   row,
@@ -103,7 +111,7 @@ function makeGen({
   row?: Arbitrary<string>;
   field: string;
   value: Arbitrary<unknown>;
-}) {
+}): Arbitrary<Generator> {
   return jsc.record({
     dataset: jsc.constant(table),
     row: row || uuidGenerator,
@@ -127,7 +135,7 @@ function makeGen({
   });
 }
 
-let generators = [];
+let generators = new Array<Arbitrary<Generator>>();
 Object.keys(schema).forEach(table => {
   Object.keys(schema[table]).reduce((obj, field) => {
     if (table === 'spreadsheet_cells' && field === 'expr') {
@@ -311,7 +319,7 @@ async function run(msgs) {
 describe('sync property test', () => {
   xit('should always sync clients into the same state', async () => {
     let test = await jsc.check(
-      jsc.forall(
+      jsc.forall<Generator[], Promise<boolean>>(
         jsc.tuple(Array.from(new Array(100)).map(() => jsc.oneof(generators))),
         async msgs => {
           let r;

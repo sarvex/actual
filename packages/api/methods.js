@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports, import/extensions
 import { lib } from './app/bundle.api';
 import * as injected from './injected';
 
