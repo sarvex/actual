@@ -6,7 +6,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:eslint-plugin/recommended',
     'plugin:node/recommended',
-    '../../.eslintrc.js',
+    '../../eslint.config.js',
   ],
   env: {
     node: true,
