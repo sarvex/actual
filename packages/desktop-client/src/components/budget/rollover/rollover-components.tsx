@@ -259,9 +259,8 @@ export const ExpenseGroupMonth = memo(function ExpenseGroupMonth({
       <SheetCell
         name="budgeted"
         width="flex"
-        borderColor={borderColor}
         textAlign="right"
-        style={[{ fontWeight: 600 }, styles.tnum]}
+        style={[{ borderColor, fontWeight: 600 }, styles.tnum]}
         valueProps={{
           binding: rolloverBudget.groupBudgeted(id),
           type: 'financial',
@@ -271,8 +270,7 @@ export const ExpenseGroupMonth = memo(function ExpenseGroupMonth({
         name="spent"
         width="flex"
         textAlign="right"
-        borderColor={borderColor}
-        style={[{ fontWeight: 600 }, styles.tnum]}
+        style={[{ borderColor, fontWeight: 600 }, styles.tnum]}
         valueProps={{
           binding: rolloverBudget.groupSumAmount(id),
           type: 'financial',
@@ -281,9 +279,9 @@ export const ExpenseGroupMonth = memo(function ExpenseGroupMonth({
       <SheetCell
         name="balance"
         width="flex"
-        borderColor={borderColor}
         textAlign="right"
         style={[
+          borderColor,
           { fontWeight: 600, paddingRight: MONTH_RIGHT_PADDING },
           styles.tnum,
         ]}
@@ -421,9 +419,12 @@ export const ExpenseCategoryMonth = memo(function ExpenseCategoryMonth({
           exposed={editing}
           focused={editing}
           width="flex"
-          borderColor="white"
           onExpose={() => onEdit(category.id, monthIndex)}
-          style={[editing && { zIndex: 100 }, styles.tnum]}
+          style={[
+            { borderColor: 'white' },
+            editing && { zIndex: 100 },
+            styles.tnum,
+          ]}
           textAlign="right"
           valueStyle={[
             {
@@ -466,8 +467,7 @@ export const ExpenseCategoryMonth = memo(function ExpenseCategoryMonth({
       <Field
         name="spent"
         width="flex"
-        borderColor={borderColor}
-        style={{ textAlign: 'right' }}
+        style={{ borderColor, textAlign: 'right' }}
       >
         <span
           data-testid="category-month-spent"
@@ -487,8 +487,11 @@ export const ExpenseCategoryMonth = memo(function ExpenseCategoryMonth({
       <Field
         name="balance"
         width="flex"
-        borderColor={borderColor}
-        style={{ paddingRight: MONTH_RIGHT_PADDING, textAlign: 'right' }}
+        style={{
+          borderColor,
+          paddingRight: MONTH_RIGHT_PADDING,
+          textAlign: 'right',
+        }}
       >
         <span {...balanceTooltip.getOpenEvents()}>
           <BalanceWithCarryover
@@ -515,9 +518,9 @@ export function IncomeGroupMonth() {
       <SheetCell
         name="received"
         width="flex"
-        borderColor={colors.border}
         textAlign="right"
         style={[
+          { borderColor: colors.border },
           { fontWeight: 600, paddingRight: MONTH_RIGHT_PADDING },
           styles.tnum,
         ]}
@@ -552,8 +555,8 @@ export function IncomeCategoryMonth({
       <Field
         name="received"
         width="flex"
-        borderColor={colors.border}
         style={[
+          { borderColor: colors.border },
           { paddingRight: MONTH_RIGHT_PADDING, textAlign: 'right' },
           isLast && { borderBottomWidth: 0 },
         ]}

@@ -40,10 +40,10 @@ function DiscoverSchedulesTable({ schedules, loading }) {
         onClick={e => {
           dispatchSelected({ type: 'select', id: item.id, event: e });
         }}
-        borderColor={selected ? colors.b8 : colors.border}
         style={{
           cursor: 'pointer',
           backgroundColor: selected ? colors.selected : 'white',
+          borderColor: selected ? colors.b8 : colors.border,
           ':hover': {
             backgroundColor: selected ? colors.selected : colors.hover,
           },

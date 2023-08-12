@@ -437,7 +437,6 @@ function SidebarCategory({
         formatter={value => displayed}
         width="flex"
         exposed={editing || temporary}
-        borderColor={dragPreview ? 'transparent' : borderColor}
         onUpdate={value => {
           if (temporary) {
             if (value === '') {
@@ -452,7 +451,11 @@ function SidebarCategory({
           }
         }}
         onBlur={() => onEditName(null)}
-        style={[{ paddingLeft: 13 }, isLast && { borderBottomWidth: 0 }]}
+        style={[
+          { borderColor: dragPreview ? 'transparent' : borderColor },
+          { paddingLeft: 13 },
+          isLast && { borderBottomWidth: 0 },
+        ]}
         inputProps={{
           placeholder: temporary ? 'New Category Name' : '',
         }}
@@ -598,7 +601,6 @@ function SidebarGroup({
         formatter={value => displayed}
         width="flex"
         exposed={editing}
-        borderColor={colors.border}
         onUpdate={value => {
           if (temporary) {
             if (value === '') {
@@ -611,7 +613,7 @@ function SidebarGroup({
           }
         }}
         onBlur={() => onEdit(null)}
-        style={{ fontWeight: 600 }}
+        style={{ borderColor: colors.border, fontWeight: 600 }}
         inputProps={{
           style: { marginLeft: 20 },
           placeholder: temporary ? 'New Group Name' : '',

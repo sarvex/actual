@@ -110,7 +110,6 @@ let Payee = memo(
 
     return (
       <Row
-        borderColor={borderColor}
         backgroundColor={
           selected ? colors.b9 : backgroundFocus ? colors.hover : 'white'
         }
@@ -120,6 +119,7 @@ let Payee = memo(
           style,
           {
             backgroundColor: hovered ? colors.hover : null,
+            borderColor,
           },
           selected && {
             backgroundColor: colors.b9,
@@ -230,9 +230,9 @@ function PayeeTableHeader() {
   return (
     <View>
       <TableHeader
-        borderColor={borderColor}
         style={{
           backgroundColor: 'white',
+          borderColor,
           color: colors.n4,
           zIndex: 200,
           userSelect: 'none',
