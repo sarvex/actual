@@ -785,10 +785,10 @@ function ExpenseGroup({
   return (
     <Row
       collapsed={true}
-      backgroundColor={colors.n11}
       style={{
         fontWeight: 600,
         opacity: group.hidden ? 0.33 : undefined,
+        backgroundColor: colors.n11,
       }}
     >
       {dragState && !dragState.preview && dragState.type === 'group' && (
@@ -939,8 +939,7 @@ function IncomeGroup({
   return (
     <Row
       collapsed={true}
-      backgroundColor={colors.n11}
-      style={{ fontWeight: 600 }}
+      style={{ fontWeight: 600, backgroundColor: colors.n11 }}
     >
       <SidebarGroup
         group={group}
@@ -988,7 +987,7 @@ function IncomeCategory({
   });
 
   return (
-    <Row innerRef={dropRef} collapsed={true} backgroundColor="transparent">
+    <Row innerRef={dropRef} collapsed={true}>
       <DropHighlight pos={dropPos} offset={{ top: 1 }} />
 
       <SidebarCategory
