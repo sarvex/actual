@@ -43,7 +43,6 @@ function DiscoverSchedulesTable({ schedules, loading }) {
           cursor: 'pointer',
           borderColor: selected ? colors.b8 : colors.border,
           backgroundColor: selected ? colors.selected : 'white',
-          borderColor: selected ? colors.b8 : colors.border,
           ':hover': {
             backgroundColor: selected ? colors.selected : colors.hover,
           },
