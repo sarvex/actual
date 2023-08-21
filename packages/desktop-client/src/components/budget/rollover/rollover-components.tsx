@@ -413,11 +413,7 @@ export const ExpenseCategoryMonth = memo(function ExpenseCategoryMonth({
           focused={editing}
           width="flex"
           onExpose={() => onEdit(category.id, monthIndex)}
-          style={[
-            { borderColor: 'white' },
-            editing && { zIndex: 100 },
-            styles.tnum,
-          ]}
+          style={[editing && { zIndex: 100 }, styles.tnum]}
           textAlign="right"
           valueStyle={[
             {
@@ -508,7 +504,6 @@ export function IncomeGroupMonth() {
         width="flex"
         textAlign="right"
         style={[
-          { borderColor: colors.border },
           { fontWeight: 600, paddingRight: MONTH_RIGHT_PADDING },
           styles.tnum,
         ]}
@@ -544,7 +539,6 @@ export function IncomeCategoryMonth({
         name="received"
         width="flex"
         style={[
-          { borderColor: colors.border },
           { paddingRight: MONTH_RIGHT_PADDING, textAlign: 'right' },
           isLast && { borderBottomWidth: 0 },
         ]}
