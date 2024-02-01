@@ -105,7 +105,7 @@ __metadata:
     recharts: ^2.8.0
     redux: ^4.0.5
     redux-thunk: ^2.3.0
-    remark-gfm: ^3.0.1
+    remark-gfm: 3.0.1
     sass: ^1.63.6
     swc-loader: ^0.2.3
     terser-webpack-plugin: ^5.3.9
@@ -17587,7 +17587,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-gfm@npm:^3.0.1":
+"remark-gfm@npm:3.0.1":
   version: 3.0.1
   resolution: "remark-gfm@npm:3.0.1"
   dependencies:
