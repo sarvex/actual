@@ -53,7 +53,7 @@
     "ws": "8.13.0"
   },
   "devDependencies": {
-    "@electron/notarize": "2.1.0",
+    "@electron/notarize": "2.3.0",
     "@electron/rebuild": "3.3.0",
     "cross-env": "^7.0.3",
     "electron": "26.2.4",
